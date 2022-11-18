@@ -3,6 +3,7 @@ const expressGraphQL = require('express-graphql').graphqlHTTP
 const  {GraphQLSchema, GraphQLObjectType, GraphQLString,
 GraphQLList, GraphQLNonNull,
 GraphQLInt} = require('graphql')
+const { type } = require('os')
 const app = express()
 
 const authors = [
@@ -56,6 +57,15 @@ const RootQueryType = new GraphQLObjectType({
     name: "Query",
     description: "Root Query",
     fields: () =>({
+        book: {
+            type: BookType,
+            description: "A single Book",
+            args: {
+                id: {type: GraphQLInt}
+            },
+            resolve: (parent, args) => books.find(book => book.id === args.id)
+            
+        },
         books: {
             type: new GraphQLList(BookType),
             description: "List of Books",
